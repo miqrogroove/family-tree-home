@@ -88,7 +88,7 @@ return new class extends AbstractModule implements ModuleCustomInterface, Middle
      */
     public function description(): string
     {
-        return 'This module changes the front page for signed-in users. After a sign in from the front page, users will go back to the Family Tree instead of redirecting My Page.';
+        return 'This module changes the front page for signed-in users. After a sign in from the front page, users will go back to the Family Tree instead of redirecting to My Page.';
     }
 
     /**
