@@ -58,7 +58,7 @@ class TreeHomePage implements RequestHandlerInterface
     {
         $this->tree_service = $tree_service;
     }
-	
+
     /**
      * @param ServerRequestInterface $request
      *
@@ -72,13 +72,13 @@ class TreeHomePage implements RequestHandlerInterface
 
         if ($tree instanceof Tree) {
             if ($tree->getPreference('imported') === '1') {
-				// HomePage class hacked right here.
-				// Do not use the UserPage as a HomePage.
+                // HomePage class hacked right here.
+                // Do not use the UserPage as a HomePage.
                 return redirect(route(TreePage::class, ['tree' => $tree->name()]));
             }
 
             if (Auth::isManager($tree, $user)) {
-                return redirect(route('manage-trees', ['tree' => $tree->name()]));
+                return redirect(route(ManageTrees::class, ['tree' => $tree->name()]));
             }
         }
 
