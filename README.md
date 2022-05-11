@@ -1,7 +1,7 @@
 # Family Tree Home Page
 Make your family tree appear on the front page for all site users.
 
-This is a custom module for [webtrees v2.0](https://github.com/fisharebest/webtrees).
+This is a custom module for [webtrees v2.1](https://github.com/fisharebest/webtrees).
 
 Whenever someone visits your front page or signs in from the front page, they should land back on the front page again instead of seeing "My Page".
 

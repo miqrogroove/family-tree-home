@@ -1,7 +1,7 @@
 <?php
 /*
 Family Tree Home Page
-Copyright (C) 2020 by Robert Chapin
+Copyright (C) 2022 by Robert Chapin
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ namespace Miqrogroove\Webtrees\FamilyTreeHome;
 
 use Fisharebest\Webtrees\Http\RequestHandlers\CreateTreePage;
 use Fisharebest\Webtrees\Http\RequestHandlers\LoginPage;
+use Fisharebest\Webtrees\Http\RequestHandlers\ManageTrees;
 use Fisharebest\Webtrees\Http\RequestHandlers\TreePage;
 
 // Most of the code below this line should mirror Fisharebest\Webtrees\Http\RequestHandlers\HomePage
@@ -32,6 +33,7 @@ use Fisharebest\Webtrees\Services\TreeService;
 use Fisharebest\Webtrees\Site;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\User;
+use Fisharebest\Webtrees\Validator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -46,8 +48,7 @@ class TreeHomePage implements RequestHandlerInterface
 {
     use ViewResponseTrait;
 
-    /** @var TreeService */
-    private $tree_service;
+    private TreeService $tree_service;
 
     /**
      * HomePage constructor.
@@ -68,7 +69,7 @@ class TreeHomePage implements RequestHandlerInterface
     {
         $default = Site::getPreference('DEFAULT_GEDCOM');
         $tree    = $this->tree_service->all()->get($default) ?? $this->tree_service->all()->first();
-        $user    = $request->getAttribute('user');
+        $user    = Validator::attributes($request)->user();
 
         if ($tree instanceof Tree) {
             if ($tree->getPreference('imported') === '1') {
