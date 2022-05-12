@@ -39,18 +39,18 @@ return new class extends AbstractModule implements ModuleCustomInterface, Middle
 
     public function boot(): void
     {
-		// Get the Webtrees router.
-		$router = app(RouterContainer::class)->getMap();
-		
-		// Retrieve the entire routing table.
-		$routes = $router->getRoutes();
-		
-		// Delete the original home page route.
-		unset($routes[HomePage::class]);
-		$router->setRoutes($routes);
-		
-		// Now recreate the home page route and point it to my customized handler.
-		$router->get(HomePage::class, '/', TreeHomePage::class);
+        // Get the Webtrees router.
+        $router = app(RouterContainer::class)->getMap();
+
+        // Retrieve the entire routing table.
+        $routes = $router->getRoutes();
+
+        // Delete the original home page route.
+        unset($routes[HomePage::class]);
+        $router->setRoutes($routes);
+
+        // Now recreate the home page route and point it to my customized handler.
+        $router->get(HomePage::class, '/', TreeHomePage::class);
     }
 
     /**
