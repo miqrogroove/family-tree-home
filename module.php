@@ -26,6 +26,7 @@ use Fisharebest\Webtrees\Http\RequestHandlers\LoginPage;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomTrait;
+use Fisharebest\Webtrees\Validator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -62,10 +63,15 @@ return new class extends AbstractModule implements ModuleCustomInterface, Middle
         if ($request->getAttribute('route')->name === LoginPage::class) {
             $params = $request->getQueryParams();
             $url    = $params['url'] ?? '';
-            if (substr_compare($url, '/my-page', -8) === 0) {
-                $params['url'] = substr($url, 0, -8);
-                $request       = $request->withQueryParams($params);
-            }
+			if (Validator::attributes($request)->boolean('rewrite_urls', $default = false)) {
+				$end = '/my-page';
+			} else {
+				$end = '%2Fmy-page';
+			}
+			if (substr_compare($url, $end, -strlen($end)) === 0) {
+				$params['url'] = substr($url, 0, -strlen($end));
+				$request       = $request->withQueryParams($params);
+			}
         }
 
         return $handler->handle($request);
@@ -108,7 +114,7 @@ return new class extends AbstractModule implements ModuleCustomInterface, Middle
      */
     public function customModuleVersion(): string
     {
-        return '1.0.02';
+        return '1.0.03';
     }
 
     /**
