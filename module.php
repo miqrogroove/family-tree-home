@@ -1,7 +1,7 @@
 <?php
 /*
 Family Tree Home Page
-Copyright (C) 2022 by Robert Chapin
+Copyright (C) 2024 by Robert Chapin
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,9 @@ use Fisharebest\Webtrees\Http\RequestHandlers\LoginPage;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomTrait;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
+use Fisharebest\Webtrees\Webtrees;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -40,7 +42,11 @@ return new class extends AbstractModule implements ModuleCustomInterface, Middle
     public function boot(): void
     {
         // Get the Webtrees router.
-        $router = app(RouterContainer::class)->getMap();
+        if (version_compare(Webtrees::VERSION, '2.2.0', '>=')) {
+            $router = Registry::container()->get(RouterContainer::class)->getMap();
+        } else {
+            $router = app(RouterContainer::class)->getMap();
+        }
 
         // Retrieve the entire routing table.
         $routes = $router->getRoutes();
@@ -114,7 +120,7 @@ return new class extends AbstractModule implements ModuleCustomInterface, Middle
      */
     public function customModuleVersion(): string
     {
-        return '1.0.03';
+        return '1.0.04';
     }
 
     /**
