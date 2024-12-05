@@ -20,7 +20,6 @@ declare(strict_types=1);
 
 namespace Miqrogroove\Webtrees\FamilyTreeHome;
 
-use Aura\Router\RouterContainer;
 use Fisharebest\Webtrees\Http\RequestHandlers\HomePage;
 use Fisharebest\Webtrees\Http\RequestHandlers\LoginPage;
 use Fisharebest\Webtrees\Module\AbstractModule;
@@ -41,22 +40,24 @@ return new class extends AbstractModule implements ModuleCustomInterface, Middle
 
     public function boot(): void
     {
-        // Get the Webtrees router.
+        $this->rebind(HomePage::class, TreeHomePage::class);
+    }
+
+    /**
+     * Dependency injection binding for webtrees
+     *
+     * @param string $base   Also known as the "abstract" class.
+     * @param string $custom Also known as the "concrete" class.
+     */
+    private function rebind(string $base, string $custom): void
+    {
         if (version_compare(Webtrees::VERSION, '2.2.0', '>=')) {
-            $router = Registry::container()->get(RouterContainer::class)->getMap();
+            $objects = Registry::container();
+            $objects->set($base, $objects->get($custom));
         } else {
-            $router = app(RouterContainer::class)->getMap();
+            $objects = app();
+            $objects->bind($base, $custom);
         }
-
-        // Retrieve the entire routing table.
-        $routes = $router->getRoutes();
-
-        // Delete the original home page route.
-        unset($routes[HomePage::class]);
-        $router->setRoutes($routes);
-
-        // Now recreate the home page route and point it to my customized handler.
-        $router->get(HomePage::class, '/', TreeHomePage::class);
     }
 
     /**
@@ -120,7 +121,7 @@ return new class extends AbstractModule implements ModuleCustomInterface, Middle
      */
     public function customModuleVersion(): string
     {
-        return '1.0.04';
+        return '1.0.05';
     }
 
     /**
