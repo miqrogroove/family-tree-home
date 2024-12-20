@@ -11,6 +11,13 @@ After installing this module, the "tree page" becomes the new "home page".  The 
 1. Unzip the module files to `/var/www/webtrees/modules_v4/family-tree-home/` or equivalent.
 1. Go test out your front page (root path) as well as the login page.
 
+## Required Settings
+
+1. Must have at least one tree visible to guests.
+2. Must have rewrite_urls = "0"
+3. Must click the Sign In link from the visitor's home/tree page.
+
+
 ## To Disable
 1. Visit the Control Panel
 1. Click "All modules"
