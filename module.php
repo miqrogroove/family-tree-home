@@ -1,7 +1,7 @@
 <?php
 /*
 Family Tree Home Page
-Copyright (C) 2024 by Robert Chapin
+Copyright (C) 2020-2026 by Robert Chapin
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -121,7 +121,7 @@ return new class extends AbstractModule implements ModuleCustomInterface, Middle
      */
     public function customModuleVersion(): string
     {
-        return '1.0.05';
+        return '1.0.06';
     }
 
     /**

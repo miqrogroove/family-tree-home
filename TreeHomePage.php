@@ -1,7 +1,7 @@
 <?php
 /*
 Family Tree Home Page
-Copyright (C) 2022 by Robert Chapin
+Copyright (C) 2020-2026 by Robert Chapin
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -41,30 +41,15 @@ use Psr\Http\Server\RequestHandlerInterface;
 use function redirect;
 use function route;
 
-/**
- * Redirect to a user/tree page.
- */
-class TreeHomePage implements RequestHandlerInterface
+final class TreeHomePage implements RequestHandlerInterface
 {
     use ViewResponseTrait;
 
-    private TreeService $tree_service;
-
-    /**
-     * HomePage constructor.
-     *
-     * @param TreeService $tree_service
-     */
-    public function __construct(TreeService $tree_service)
-    {
-        $this->tree_service = $tree_service;
+    public function __construct(
+        private readonly TreeService $tree_service,
+    ) {
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     *
-     * @return ResponseInterface
-     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $default = Site::getPreference('DEFAULT_GEDCOM');
@@ -72,7 +57,7 @@ class TreeHomePage implements RequestHandlerInterface
         $user    = Validator::attributes($request)->user();
 
         if ($tree instanceof Tree) {
-            if ($tree->getPreference('imported') === '1') {
+            if ($tree->imported()) {
                 // HomePage class hacked right here.
                 // Do not use the UserPage as a HomePage.
                 return redirect(route(TreePage::class, ['tree' => $tree->name()]));
